@@ -1,7 +1,8 @@
 import javax.swing as swing
 import java.awt.event as event
-import java.sql as sql
 import shared.SwingResources as swing_resources
+from client.model import ClientApplicationModel, LoginModel
+from client.view import ClientApplicationView, LoginView
 
 class LoginController:
     def __init__(self, view, model):
@@ -9,8 +10,8 @@ class LoginController:
         self.model = model
 
         # action listeners
-        self.view.set_password_listener(LoginListener(self))
-        self.view.set_login_listener(LoginListener(self))
+        self.view.set_password_listener(LoginListener())
+        self.view.set_login_listener(LoginListener())
         self.view.set_show_password_listener(swing_resources.ShowPasswordListener(self.view.get_chk_show_password(),
                                                                                   self.view.get_txt_password()))
 
@@ -30,24 +31,22 @@ class LoginController:
         self.view.repaint()
 
 class LoginListener(event.ActionListener):
-    def __init__(self, controller):
-        self.controller = controller
-
     def actionPerformed(self, e):
-        username = self.controller.view.get_txt_username().getText()
+        username = self.view.get_txt_username().getText()
         try:
-            if self.controller.model.validate_account(self.controller.view.get_txt_username().getText(),
-                                                     self.controller.view.get_txt_password().getText()):
+            msg = self.model.validate_account(self.view.get_txt_username().getText(),
+                                              self.view.get_txt_password().getText())
+            if msg == "valid":
                 swing.SwingUtilities.invokeLater(lambda: ClientApplicationController(ClientApplicationView(),
                                                                                      ClientApplicationModel(username,
-                                                                                                            self.controller.model.get_wf_impl())))
-                self.controller.view.dispose()
+                                                                                                            self.model.get_wf_impl())))
+                self.view.dispose()
             else:
-                swing.SwingUtilities.invokeLater(lambda: self.controller.view.set_error_message("Wrong credentials. Try again.")
-                                                 and self.controller.view.get_txt_password().setText("Password")
-                                                 and self.controller.view.get_txt_password().setEchoChar(chr(0))
-                                                 and self.controller.view.get_chk_show_password().setSelected(False))
-        except sql.SQLException as sqle:
-            sqle.printStackTrace()
+                swing.SwingUtilities.invokeLater(lambda: (
+                    self.view.set_error_message(msg),
+                    self.view.get_txt_password().setText("Password"),
+                    self.view.get_txt_password().setEchoChar(chr(0)),
+                    self.view.get_chk_show_password().setSelected(False)
+                ))
         except Exception as ex:
             raise RuntimeException(ex)
