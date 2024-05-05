@@ -1,0 +1,71 @@
+module BoggleApp {
+    struct userInfo {
+        string username;
+        string pfpAddress;
+        long points;
+    };
+    struct LobbyUser {
+        string username;
+        string pfpAddress;
+    };
+
+    typedef sequence<userInfo> leaderboards;
+    typedef sequence<LobbyUser> lobbyUserList;
+    typedef sequence<string> wordList;
+
+    exception accountLoggedIn {
+        string reason;
+    };
+
+    exception accountDoesNotExist {
+        string reason;
+    };
+
+    exception updateFailed {
+        string reason;
+    };
+
+    interface BoggleClient {
+
+        void validateAccount(in string username, in string password) raises (accountLoggedIn, accountDoesNotExist);
+
+        void attemptJoin(in string username);
+
+        lobbyUserList getLobbyMembers();
+
+        long long getCurrLobbyTimerValue(out boolean validLobby);
+
+        long getGameID(in string username);
+
+        string getLetters(in long gameID);
+
+        long long getGameDurationVal(in long gameID);
+
+        void sendUserWordList(in long gameID, in string username, in wordList listOfUserWords);
+
+        string getRoundWinner(in long gameID);
+
+        string getNextRoundLetterSet(in long gameRoomID);
+
+        void exitGameRoom(in string username);
+
+        string getOverallWinner(in long gameID);
+
+        leaderboards getLeaderboard();
+
+        void editInfo(in string username, in string toEdit, in string newInfo) raises (updateFailed);
+        void editPassword(in string username, in string oldPass, in string newPass) raises (updateFailed);
+
+        long getUserTotalPoints(in string username);
+        long getUserPointsOngoingGame(in long gameID, in string username);
+        long getNumberOfMatches(in string username);
+        long getNumberOfWins(in string username);
+
+        leaderboards getCurrGameLeaderboard(in long gameID);
+
+        string getPFPOFUser(in string username);
+        string getFullName(in string username);
+
+        boolean isValidWord(in string word);
+    };
+};
