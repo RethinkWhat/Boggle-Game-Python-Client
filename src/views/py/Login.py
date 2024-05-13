@@ -29,7 +29,7 @@ class Ui_Dialog(object):
         self.label_3 = QtWidgets.QLabel(Dialog)
         self.label_3.setGeometry(QtCore.QRect(70, 280, 261, 51))
         self.label_3.setText("")
-        self.label_3.setPixmap(QtGui.QPixmap(r"../../res/login/test.png"))
+        self.label_3.setPixmap(QtGui.QPixmap("../../res/login/test.png"))
         self.label_3.setObjectName("label_3")
         self.label_4 = QtWidgets.QLabel(Dialog)
         self.label_4.setGeometry(QtCore.QRect(410, 30, 371, 421))
