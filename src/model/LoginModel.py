@@ -7,9 +7,9 @@ class LoginModel:
     """
     This is the constructor
     
-    wfmpl variable should only be casted to BoggleClient class from the BoggleClient_idl (line 142)
+    wfmpl variable should only be casted to BoggleClient interface from the BoggleClient_idl (line 142)
     """
-    def __init__(self, wfmpl):
+    def __init__(self, wfmpl: BoggleClient):
         self.wfmpl = wfmpl
 
     """
@@ -38,5 +38,5 @@ class LoginModel:
     """
     Sets the wfmpl variable to a BoggleClient object when used
     """
-    def setWfmpl(self, wfmpl):
+    def setWfmpl(self, wfmpl: BoggleClient):
         self.wfmpl = wfmpl
