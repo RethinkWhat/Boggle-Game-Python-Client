@@ -4,9 +4,17 @@ from BoggleClient_idl import accountLoggedIn
 
 class LoginModel:
 
+    """
+    This is the constructor
+    
+    wfmpl variable should only be casted to BoggleClient class from the BoggleClient_idl (line 142)
+    """
     def __init__(self, wfmpl):
         self.wfmpl = wfmpl
 
+    """
+    The validateAccount method will use the validateAccount from the wfmpl object
+    """
     def validateAccount(self, username, password):
         try:
 
@@ -21,8 +29,14 @@ class LoginModel:
 
             return "Account already logged in"
 
+    """
+    Returns the wfmpl variable
+    """
     def getWfmpl(self):
         return self.wfmpl
     
+    """
+    Sets the wfmpl variable to a BoggleClient object when used
+    """
     def setWfmpl(self, wfmpl):
         self.wfmpl = wfmpl
