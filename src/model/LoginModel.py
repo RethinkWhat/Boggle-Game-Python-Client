@@ -1,4 +1,4 @@
-from BoggleClient_idl import _objref_BoggleClient as BoggleClient
+from BoggleClient_idl import BoggleClient as BoggleClient
 from BoggleClient_idl import accountDoesNotExist
 from BoggleClient_idl import accountLoggedIn
 
