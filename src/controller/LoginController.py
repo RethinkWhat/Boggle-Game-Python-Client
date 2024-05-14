@@ -2,6 +2,9 @@ from PyQt5.QtCore import QObject
 
 from src.views.py import Login
 from src.model import LoginModel
+from src.views.py import HomePage
+from src.model import HomePageModel
+from src.controller import HomePageController
 import traceback
 
 class LoginController(QObject):
@@ -22,7 +25,11 @@ class LoginController(QObject):
             isValid = self.model.validateAccount(username, password)
 
             if(isValid == "valid"):
+
                 # Open HomeController
+                HomePageController(HomePage(), HomePageModel(username ,self.model.getWfmpl()))
+
+
                 self.view.close()
             else:
                 #Error message and mechanisms
