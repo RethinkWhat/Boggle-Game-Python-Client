@@ -162,8 +162,6 @@ BoggleClient._d_getLetters = ((omniORB.tcInternal.tv_long, ), ((omniORB.tcIntern
 BoggleClient._d_getGameDurationVal = ((omniORB.tcInternal.tv_long, ), (omniORB.tcInternal.tv_longlong, ), None)
 BoggleClient._d_sendUserWordList = ((omniORB.tcInternal.tv_long, (omniORB.tcInternal.tv_string,0), omniORB.typeMapping["IDL:BoggleApp/wordList:1.0"]), (), None)
 BoggleClient._d_getRoundWinner = ((omniORB.tcInternal.tv_long, ), ((omniORB.tcInternal.tv_string,0), ), None)
-BoggleClient._d_getNextRoundLetterSet = ((omniORB.tcInternal.tv_long, ), ((omniORB.tcInternal.tv_string,0), ), None)
-BoggleClient._d_exitGameRoom = (((omniORB.tcInternal.tv_string,0), ), (), None)
 BoggleClient._d_getOverallWinner = ((omniORB.tcInternal.tv_long, ), ((omniORB.tcInternal.tv_string,0), ), None)
 BoggleClient._d_getLeaderboard = ((), (omniORB.typeMapping["IDL:BoggleApp/leaderboards:1.0"], ), None)
 BoggleClient._d_editInfo = (((omniORB.tcInternal.tv_string,0), (omniORB.tcInternal.tv_string,0), (omniORB.tcInternal.tv_string,0)), (), {_0_BoggleApp.updateFailed._NP_RepositoryId: _0_BoggleApp._d_updateFailed})
@@ -176,6 +174,8 @@ BoggleClient._d_getCurrGameLeaderboard = ((omniORB.tcInternal.tv_long, ), (omniO
 BoggleClient._d_getPFPOFUser = (((omniORB.tcInternal.tv_string,0), ), ((omniORB.tcInternal.tv_string,0), ), None)
 BoggleClient._d_getFullName = (((omniORB.tcInternal.tv_string,0), ), ((omniORB.tcInternal.tv_string,0), ), None)
 BoggleClient._d_isValidWord = (((omniORB.tcInternal.tv_string,0), ), (omniORB.tcInternal.tv_boolean, ), None)
+BoggleClient._d_exitLobby = (((omniORB.tcInternal.tv_string,0), ), (), None)
+BoggleClient._d_logout = (((omniORB.tcInternal.tv_string,0), ), (), None)
 
 # BoggleClient object reference
 class _objref_BoggleClient (CORBA.Object):
@@ -210,12 +210,6 @@ class _objref_BoggleClient (CORBA.Object):
 
     def getRoundWinner(self, *args):
         return self._obj.invoke("getRoundWinner", _0_BoggleApp.BoggleClient._d_getRoundWinner, args)
-
-    def getNextRoundLetterSet(self, *args):
-        return self._obj.invoke("getNextRoundLetterSet", _0_BoggleApp.BoggleClient._d_getNextRoundLetterSet, args)
-
-    def exitGameRoom(self, *args):
-        return self._obj.invoke("exitGameRoom", _0_BoggleApp.BoggleClient._d_exitGameRoom, args)
 
     def getOverallWinner(self, *args):
         return self._obj.invoke("getOverallWinner", _0_BoggleApp.BoggleClient._d_getOverallWinner, args)
@@ -253,6 +247,12 @@ class _objref_BoggleClient (CORBA.Object):
     def isValidWord(self, *args):
         return self._obj.invoke("isValidWord", _0_BoggleApp.BoggleClient._d_isValidWord, args)
 
+    def exitLobby(self, *args):
+        return self._obj.invoke("exitLobby", _0_BoggleApp.BoggleClient._d_exitLobby, args)
+
+    def logout(self, *args):
+        return self._obj.invoke("logout", _0_BoggleApp.BoggleClient._d_logout, args)
+
 omniORB.registerObjref(BoggleClient._NP_RepositoryId, _objref_BoggleClient)
 _0_BoggleApp._objref_BoggleClient = _objref_BoggleClient
 del BoggleClient, _objref_BoggleClient
@@ -263,7 +263,7 @@ class BoggleClient (PortableServer.Servant):
     _NP_RepositoryId = _0_BoggleApp.BoggleClient._NP_RepositoryId
 
 
-    _omni_op_d = {"validateAccount": _0_BoggleApp.BoggleClient._d_validateAccount, "attemptJoin": _0_BoggleApp.BoggleClient._d_attemptJoin, "getLobbyMembers": _0_BoggleApp.BoggleClient._d_getLobbyMembers, "getCurrLobbyTimerValue": _0_BoggleApp.BoggleClient._d_getCurrLobbyTimerValue, "getGameID": _0_BoggleApp.BoggleClient._d_getGameID, "getLetters": _0_BoggleApp.BoggleClient._d_getLetters, "getGameDurationVal": _0_BoggleApp.BoggleClient._d_getGameDurationVal, "sendUserWordList": _0_BoggleApp.BoggleClient._d_sendUserWordList, "getRoundWinner": _0_BoggleApp.BoggleClient._d_getRoundWinner, "getNextRoundLetterSet": _0_BoggleApp.BoggleClient._d_getNextRoundLetterSet, "exitGameRoom": _0_BoggleApp.BoggleClient._d_exitGameRoom, "getOverallWinner": _0_BoggleApp.BoggleClient._d_getOverallWinner, "getLeaderboard": _0_BoggleApp.BoggleClient._d_getLeaderboard, "editInfo": _0_BoggleApp.BoggleClient._d_editInfo, "editPassword": _0_BoggleApp.BoggleClient._d_editPassword, "getUserTotalPoints": _0_BoggleApp.BoggleClient._d_getUserTotalPoints, "getUserPointsOngoingGame": _0_BoggleApp.BoggleClient._d_getUserPointsOngoingGame, "getNumberOfMatches": _0_BoggleApp.BoggleClient._d_getNumberOfMatches, "getNumberOfWins": _0_BoggleApp.BoggleClient._d_getNumberOfWins, "getCurrGameLeaderboard": _0_BoggleApp.BoggleClient._d_getCurrGameLeaderboard, "getPFPOFUser": _0_BoggleApp.BoggleClient._d_getPFPOFUser, "getFullName": _0_BoggleApp.BoggleClient._d_getFullName, "isValidWord": _0_BoggleApp.BoggleClient._d_isValidWord}
+    _omni_op_d = {"validateAccount": _0_BoggleApp.BoggleClient._d_validateAccount, "attemptJoin": _0_BoggleApp.BoggleClient._d_attemptJoin, "getLobbyMembers": _0_BoggleApp.BoggleClient._d_getLobbyMembers, "getCurrLobbyTimerValue": _0_BoggleApp.BoggleClient._d_getCurrLobbyTimerValue, "getGameID": _0_BoggleApp.BoggleClient._d_getGameID, "getLetters": _0_BoggleApp.BoggleClient._d_getLetters, "getGameDurationVal": _0_BoggleApp.BoggleClient._d_getGameDurationVal, "sendUserWordList": _0_BoggleApp.BoggleClient._d_sendUserWordList, "getRoundWinner": _0_BoggleApp.BoggleClient._d_getRoundWinner, "getOverallWinner": _0_BoggleApp.BoggleClient._d_getOverallWinner, "getLeaderboard": _0_BoggleApp.BoggleClient._d_getLeaderboard, "editInfo": _0_BoggleApp.BoggleClient._d_editInfo, "editPassword": _0_BoggleApp.BoggleClient._d_editPassword, "getUserTotalPoints": _0_BoggleApp.BoggleClient._d_getUserTotalPoints, "getUserPointsOngoingGame": _0_BoggleApp.BoggleClient._d_getUserPointsOngoingGame, "getNumberOfMatches": _0_BoggleApp.BoggleClient._d_getNumberOfMatches, "getNumberOfWins": _0_BoggleApp.BoggleClient._d_getNumberOfWins, "getCurrGameLeaderboard": _0_BoggleApp.BoggleClient._d_getCurrGameLeaderboard, "getPFPOFUser": _0_BoggleApp.BoggleClient._d_getPFPOFUser, "getFullName": _0_BoggleApp.BoggleClient._d_getFullName, "isValidWord": _0_BoggleApp.BoggleClient._d_isValidWord, "exitLobby": _0_BoggleApp.BoggleClient._d_exitLobby, "logout": _0_BoggleApp.BoggleClient._d_logout}
 
 BoggleClient._omni_skeleton = BoggleClient
 _0_BoggleApp__POA.BoggleClient = BoggleClient

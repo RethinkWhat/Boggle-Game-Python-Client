@@ -1,11 +1,41 @@
-from omniORB import CORBA
-from model import BoggleApp
+import sys
+import CORBA
+import CosNaming
+from BoggleApp import BoggleClient_idl
 
-orb = CORBA.ORB_init()
-obj = orb.string_to_object("IOR:000000000000001f49444c3a426f67676c654170702f426f67676c65436c69656e743a312e30000000000001000000000000008a000102000000000f3139322e3136382e35302e3136300000c571000000000031afabcb000000002048295b9100000001000000000000000100000008526f6f74504f410000000008000000010000000014000000000000020000000100000020000000000001000100000002050100010001002000010109000000010001010000000026000000020002")
-server = obj._narrow(BoggleApp.BoggleClient)
 
-if server is None:
-        print("An issue exists in your server connection")
+def main():
+    # Initialize the ORB
+    orb = CORBA.ORB_init(sys.argv, CORBA.ORB_ID)
 
-print("Server: " + server.getFullName("rithik"))
+    # Get the root naming context
+    obj = orb.resolve_initial_references("NameService")
+    ncRef = obj._narrow(CosNaming.NamingContext)
+
+    if ncRef is None:
+        print("Failed to narrow the root naming context")
+        sys.exit(1)
+
+    # Resolve the object reference in the Naming context
+    name = [CosNaming.NameComponent("WordFactory", "")]
+    try:
+        obj = ncRef.resolve(name)
+    except CosNaming.NamingContext.NotFound:
+        print("Name not found")
+        sys.exit(1)
+
+    # Narrow the object reference to BoggleClient
+    boggle_client = obj._narrow(BoggleClient_idl)
+
+    if boggle_client is None:
+        print("Object reference is not a BoggleClient")
+        sys.exit(1)
+
+    # Now you can call methods on the boggle_client object
+    # Example:
+    # result = boggle_client.someMethod()
+    # print(result)
+
+
+if __name__ == "__main__":
+    main()
