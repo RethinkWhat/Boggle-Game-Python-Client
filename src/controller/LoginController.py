@@ -15,6 +15,8 @@ class LoginController(QObject):
 
         self.view.pushButton.clicked.connect(self.loginClicked)
 
+        self.view.show()
+
 
     def loginClicked(self):
         
