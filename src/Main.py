@@ -1,14 +1,15 @@
-from model.LoginModel import LoginModel
-from views.Login import Login
-from controller.LoginController import LoginController
+from src.views.py import Login
+from src.model import LoginModel
+from src.controller import LoginController
 
-"""
-Create instances of the view and the model
-"""
-view = Login()
-model = LoginModel()
+if __name__ == "__main__":
+    """
+    Create instances of the view and the model
+    """
+    view = Login()
+    model = LoginModel()
 
-"""
-Instantiate the controller
-"""
-LoginController(view, model)
+    """
+    Instantiate the controller
+    """
+    LoginController(view, model)

@@ -1,5 +1,8 @@
-from model import LoginModel.LoginModel as LoginModel
-from views import Login.Login as Login
+from PyQt5.QtCore import QObject
+
+from src.views.py import Login
+from src.model import LoginModel
+import traceback
 
 class LoginController(QObject):
 
@@ -7,7 +10,7 @@ class LoginController(QObject):
         self.view = view
         self.model = model
 
-        self.view.pushButton.clicked.connect(self.loginClicked);
+        self.view.pushButton.clicked.connect(self.loginClicked)
 
 
     def loginClicked(self):
@@ -15,5 +18,14 @@ class LoginController(QObject):
         username = self.view.user.text()
         password = self.view.passwor.text()
 
-        #set login logic here
-        
+        try:
+            isValid = self.model.validateAccount(username, password)
+
+            if(isValid == "valid"):
+                # Open HomeController
+                self.view.close()
+            else:
+                #Error message and mechanisms
+                self.view.close()
+        except Exception as ex:
+            traceback.print_exc()
