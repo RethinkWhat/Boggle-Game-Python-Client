@@ -3,11 +3,6 @@ import re
 import sys
 import time
 import threading
-def countdown_timer(milisecs):
-    seconds = milisecs / 1000.0
-    while seconds >= 0.0:
-        time.sleep(1)
-        seconds -= 1.0
 
 from omniORB import CORBA
 import BoggleApp
@@ -20,7 +15,7 @@ if __name__ == "__main__":
     IOR is to be entered/changed everytime the server on java's end restarts
     """
     obj = orb.string_to_object(
-        "IOR:000000000000001f49444c3a426f67676c654170702f426f67676c65436c69656e743a312e30000000000001000000000000008a000102000000000f3136392e3235342e38332e3130370000c64c000000000031afabcb00000000208205ff2000000001000000000000000100000008526f6f74504f410000000008000000010000000014000000000000020000000100000020000000000001000100000002050100010001002000010109000000010001010000000026000000020002")
+        "IOR:000000000000001f49444c3a426f67676c654170702f426f67676c65436c69656e743a312e30000000000001000000000000008a000102000000000f3136392e3235342e38332e3130370000c776000000000031afabcb000000002082178eaa00000001000000000000000100000008526f6f74504f410000000008000000010000000014000000000000020000000100000020000000000001000100000002050100010001002000010109000000010001010000000026000000020002")
     server = obj._narrow(BoggleApp.BoggleClient)
 
 
@@ -112,18 +107,16 @@ if __name__ == "__main__":
                     #get duration
                     round = 1
                     usernameWinnerGame = server.getOverallWinner(server.getGameID(username))
-                    defa = (server.getGameDurationVal(server.getGameID(username)))
+                    remTime = (server.getGameDurationVal(server.getGameID(username)))
                     while usernameWinnerGame == "undecided":
-                        remTime=defa
                         #array of words to be sent to server and get pts.
                         words= []
                         print("++++++++++++++++++++++++++++++++++++++++")
                         print("+++++++++++++++GAME ROOM++++++++++++++++")
                         print("round ", round, "!")
                         print("You have ", remTime/1000, " seconds")
-                        timer_thread = threading.Thread(target=countdown_timer(defa))
-                        timer_thread.start()
-                        while remTime >= 0:
+                        while remTime > 0:
+                            print(remTime)
                             print("Wordset:")
                             print(server.getLetters(server.getGameID(username)))
                             string = input("Please enter your words:")
@@ -159,7 +152,6 @@ if __name__ == "__main__":
                                 print("Incorrect input.")
                             sys.stdout.flush()
                             remTime = (server.getGameDurationVal(server.getGameID(username)))
-                        timer_thread.join()
                         print("TIME'S UP")
                         server.sendUserWordList(server.getGameID(username), username, words)
                         time.sleep(5)
