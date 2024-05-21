@@ -49,21 +49,13 @@ def get_input(prompt, timer, lock):
     return user_input
 
 
-def flush_input():
-    try:
-        import msvcrt
-        while msvcrt.kbhit():
-            msvcrt.getch()
-    except ImportError:
-        import termios
-        termios.tcflush(sys.stdin, termios.TCIOFLUSH)
-
 
 if __name__ == "__main__":
     orb = CORBA.ORB_init()
-    obj = orb.string_to_object("IOR:000000000000001f49444c3a426f67676c654170702f426f67676c65436c69656e743a312e30000000000001000000000000008a000102000000000f3136392e3235342e38332e3130370000cf44000000000031afabcb000000002095b2afd800000001000000000000000100000008526f6f74504f410000000008000000010000000014000000000000020000000100000020000000000001000100000002050100010001002000010109000000010001010000000026000000020002")  # Replace with actual IOR
+    obj = orb.string_to_object("IOR:000000000000001f49444c3a426f67676c654170702f426f67676c65436c69656e743a312e30000000000001000000000000008a000102000000000f3130302e38342e3136382e3132340000cc17000000000031afabcb00000000209ad69d1800000001000000000000000100000008526f6f74504f410000000008000000010000000014000000000000020000000100000020000000000001000100000002050100010001002000010109000000010001010000000026000000020002")
     server = obj._narrow(BoggleApp.BoggleClient)
 
+    # server.logout("ka")
     input_lock = threading.Lock()
     flag = 0
     while flag == 0:
@@ -82,7 +74,6 @@ if __name__ == "__main__":
             break
 
     while flag == 1:
-        flush_input()
         os.system('cls' if os.name == 'nt' else 'clear')
         print("<><><><><><><><><><>")
         output = str(server.getLeaderboard())
@@ -106,7 +97,6 @@ if __name__ == "__main__":
             server.logout(username)
             flag = 0
         elif choice == "1":
-            flush_input()
             server.attemptJoin(username)
             dura = str(server.getCurrLobbyTimerValue())
             pattern = r"\d+"
@@ -148,9 +138,6 @@ if __name__ == "__main__":
                         print(server.getLetters(server.getGameID(username)))
                         string = get_input("Please enter your words: ", TimerThread(remTime // 1000), input_lock)
 
-                        if string is None or len(string)<4:
-                            break
-
                         string = string.upper()
 
                         server.getLetters(server.getGameID(username))
@@ -169,15 +156,15 @@ if __name__ == "__main__":
                                         text = text - 1
 
                                 if text == 0:
-                                    print(string, " is the right word.")
+                                    print(string," is the right word!")
                                     words.append(string)
                                 else:
-                                    print(string, " is NOT the right word.")
+                                    print(string," IS NOT the right word.")
 
                         else:
                             print("Incorrect input.")
-                        flush_input()
                         remTime = (server.getGameDurationVal(server.getGameID(username)))
+                        print("<<Remaining time: ",remTime/1000, " >>")
                     print("TIME'S UP")
                     print("your entered words: " , words)
                     server.sendUserWordList(server.getGameID(username), username, words)
@@ -185,9 +172,8 @@ if __name__ == "__main__":
                     usernameWinnerRound = server.getRoundWinner(server.getGameID(username))
                     usernameWinnerGame = server.getOverallWinner(server.getGameID(username))
                     print(usernameWinnerRound, " wins this round")
-                    print("and the winner: ", usernameWinnerGame)
+                    #print("and the winner: ", usernameWinnerGame)
                     time.sleep(5)
                     round = round + 1
                 print(usernameWinnerGame, " is the winner of this game!")
                 time.sleep(2)
-                flush_input()
